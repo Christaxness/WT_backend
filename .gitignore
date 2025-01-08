@@ -1,0 +1,93 @@
+# Visual Studio spezifisch
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.vcxproj.user
+ipch/
+*.aps
+*.ncb
+*.opensdf
+*.sdf
+*.cachefile
+*.log
+
+# Build Verzeichnisse
+bin/
+obj/
+[Bb]uild/
+[Bb]uild[Ll]ogs/
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+packages/
+*.symbols.nupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Paketmanager spezifisch
+node_modules/
+npm-debug.log*
+yarn-error.log
+*.npmrc
+package-lock.json
+
+# Test Ergebnisse
+TestResults/
+*.trx
+*.coverage
+coverage/
+
+# Logs und temporäre Dateien
+*.log
+*.tlog
+*.log*
+*.log.??
+*.logxml
+*.log.*.json
+
+# Versteckte OS/IDE-Dateien
+*.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+
+# Sonstiges
+*.vsix
+*.swp
+*.bak
+*.tmp
+*.tmp*
+*.diff
+*.patch
+*.orig
+*.rej
+
+# ReSharper spezifisch
+_ReSharper*/
+*.DotSettings.user
+*.DotSettings
+
+# Rider spezifisch
+.idea/
+.idea_modules/
+*.iws
+
+# Lokal generierte Webdateien
+wwwroot/node_modules/
+wwwroot/lib/
+wwwroot/dist/
+
+# Globale JSON für lokale Umgebungen
+global.json
+
+# Weitere optionale Dateien (falls benötigt, einfach auskommentieren)
+# publish/
+# !wwwroot/
+
+# Umgebungsvariablen
+.env

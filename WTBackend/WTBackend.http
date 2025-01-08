@@ -1,0 +1,6 @@
+@WTBackend_HostAddress = http://localhost:5114
+
+GET {{WTBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
