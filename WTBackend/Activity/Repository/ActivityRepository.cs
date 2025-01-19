@@ -32,7 +32,7 @@ namespace WTBackend.Activity.ActivityRepo
                     if (!columnExists)
                     {
                         // Wenn die Spalte nicht existiert
-                        return ApiResponse.ErrorResponse("Die angegebene Spalte existiert nicht.");
+                        return ApiResponse.ErrorResponse("Coulumn does not exist");
                     }
                 }
 
@@ -46,8 +46,6 @@ namespace WTBackend.Activity.ActivityRepo
 
                 };
 
-                
-
                 await _dbContext.activities.AddAsync(activity);
                 await _dbContext.SaveChangesAsync();
                 return ApiResponse.SuccessResponse("Activity was created");
@@ -56,12 +54,12 @@ namespace WTBackend.Activity.ActivityRepo
             catch (DbUpdateException ex)
             {
                 // Fehler bei Datenbankaktualisierungen
-                return ApiResponse.ErrorResponse("Datenbankfehler: " + ex.Message);
+                return ApiResponse.ErrorResponse("Database error: " + ex.Message);
             }
             catch (Exception ex)
             {
                 // Allgemeine Fehlerbehandlung
-                return ApiResponse.ErrorResponse("Ein unerwarteter Fehler ist aufgetreten: " + ex.Message);
+                return ApiResponse.ErrorResponse("Unexpected error occured: " + ex.Message);
             }
 
         }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WTBackend.Activity.Dto;
 using WTBackend.Activity.InterfaceActivity;
-using WTBackend.Activity.Models;
 
 namespace WTBackend.Activity.ActivityController
 {
