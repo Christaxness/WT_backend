@@ -10,9 +10,13 @@ namespace WTBackend.Mappings
     {
         public MappingProfile()
         {
+            // Mapping von ActivityModel zu ResponseActivityDTO für Antworten auf GET Requests
             CreateMap<ActivityModel, ResponseActivityDTO>();
-            // Optional: Mapping von ColumnModel zu ColumnDto (mit Activities als DTOs)
 
+            // Mapping von CreateActivityDTO zu ActivityModel für die Speicherung in der Datenbank
+            CreateMap<CreateActivityDTO, ActivityModel>();
+
+            // Mapping von ColumnModel zu ColumnDto (mit Activities als DTOs) um Loops zu verhindern
             CreateMap<ColumnModel, ColumnDTO>()
                 .ForMember(dest => dest.Activities, opt => opt.MapFrom(src => src.Activity));
         }

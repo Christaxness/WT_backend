@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using WTBackend.Activity.Dto;
 using WTBackend.Activity.InterfaceActivity;
 using WTBackend.Activity.Models;
@@ -10,8 +11,10 @@ namespace WTBackend.Activity.ActivityRepo
     public class ActivityRepository : IActivityRepo
     {
         private readonly KanbanDbContext _dbContext;
-        public ActivityRepository(KanbanDbContext kanbanDbContext) { 
+        private readonly IMapper _mapper;
+        public ActivityRepository(KanbanDbContext kanbanDbContext, IMapper mapper) { 
             _dbContext = kanbanDbContext;
+            _mapper = mapper;
         }
 
         public async Task<ApiResponse> CreateActivityAsync(CreateActivityDTO activityModel)
@@ -36,15 +39,8 @@ namespace WTBackend.Activity.ActivityRepo
                     }
                 }
 
-
-                var activity = new ActivityModel
-                {
-                    Title = activityModel.Title,
-                    ColumnTitle = activityModel.ColumnTitle,
-                    Description = activityModel.Description,
-                    Category = activityModel.Category,
-
-                };
+                //Mapping von CreateActivityModel -> ActivityModel für die Datenbank
+                var activity = _mapper.Map<ActivityModel>(activityModel);
 
                 await _dbContext.activities.AddAsync(activity);
                 await _dbContext.SaveChangesAsync();

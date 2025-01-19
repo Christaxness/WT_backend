@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata.Ecma335;
 using WTBackend.Column.Dto;
 using WTBackend.Column.Interface;
-using WTBackend.Column.Models;
 using WTBackend.DbHelper;
 
 namespace WTBackend.Column.Repository
