@@ -10,7 +10,7 @@ namespace WTBackend.Mappings
     {
         public MappingProfile()
         {
-            CreateMap<ActivityModel, ActivityDTO>();
+            CreateMap<ActivityModel, ResponseActivityDTO>();
             // Optional: Mapping von ColumnModel zu ColumnDto (mit Activities als DTOs)
 
             CreateMap<ColumnModel, ColumnDTO>()

@@ -5,7 +5,7 @@ namespace WTBackend.Column.Dto
     public class ColumnDTO
     {
         public string Title { get; set; }
-        public List<ActivityDTO> Activities { get; set; }
+        public List<ResponseActivityDTO> Activities { get; set; }
 
     }
 }

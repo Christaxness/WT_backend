@@ -34,6 +34,11 @@ namespace WTBackend.DbHelper
                 .Property(c => c.Category)
                 .HasMaxLength(50);
 
+            modelBuilder.Entity<ActivityModel>()
+                .Property(c=> c.ColumnTitle)
+                .HasMaxLength(50)
+                .HasDefaultValue("New");
+
             // Konfiguration für die Tabelle mit den Spalten in der Postgres Datenbank
             modelBuilder.Entity<ColumnModel>()
                 .HasKey(columns => columns.Title);
