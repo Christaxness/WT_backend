@@ -1,6 +1,5 @@
 ﻿namespace WTBackend.APIResponses
 {
-    //Besere Antworten bei Fehlern die an den Client zurück geschickt werden
     public class ApiResponse
     {
         public bool Success { get; set; }
@@ -12,11 +11,13 @@
             Message = message;
         }
 
-        // Hilfsmethoden
         public static ApiResponse SuccessResponse(string message)
             => new ApiResponse(true, message);
 
         public static ApiResponse ErrorResponse(string message)
             => new ApiResponse(false, message);
+
+        public static ApiResponse ErrorResponse(string message, Exception ex)
+            => new ApiResponse(false, $"{message} Error: {ex.Message}");
     }
 }

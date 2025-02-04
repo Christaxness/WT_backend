@@ -16,9 +16,13 @@ namespace WTBackend.Mappings
             // Mapping von CreateActivityDTO zu ActivityModel für die Speicherung in der Datenbank
             CreateMap<CreateActivityDTO, ActivityModel>();
 
+
             // Mapping von ColumnModel zu ColumnDto (mit Activities als DTOs) um Loops zu verhindern
-            CreateMap<ColumnModel, ColumnDTO>()
+            CreateMap<ColumnModel, ResponseColumnDTO>()
                 .ForMember(dest => dest.Activities, opt => opt.MapFrom(src => src.Activity));
+
+            // Mapping von CreateColumnDTO zu ColumnModel für die Speicherung in der Datenbank
+            CreateMap<CreateColumnDTO,ColumnModel>();
         }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WTBackend.Activity.InterfaceActivity;
 using WTBackend.Column.Dto;
 using WTBackend.Column.Interface;
-using WTBackend.Column.Models;
 
 namespace WTBackend.Column.Controller
 {
@@ -18,7 +16,7 @@ namespace WTBackend.Column.Controller
         }
 
         [HttpGet("/columns")]
-        public async Task<ActionResult<List<ColumnDTO>>> GetAllColumns()
+        public async Task<ActionResult<List<ResponseColumnDTO>>> GetAllColumns()
         {
             var result = await _columnRepo.GetAllColumns();
             if (result != null && result.Any())
@@ -26,6 +24,38 @@ namespace WTBackend.Column.Controller
                 return Ok(result);
             }
             return NotFound("No activities found.");
+        }
+
+        [HttpPost("/columns")]
+        public async Task<ActionResult> CreateColumn(CreateColumnDTO createColumnDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var result = await _columnRepo.CreateColumn(createColumnDTO);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpDelete("/columns")]
+        public async Task<ActionResult> DeleteColumn(string title) {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var result = await _columnRepo.DeleteColumn(title);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+
         }
     }
 }
