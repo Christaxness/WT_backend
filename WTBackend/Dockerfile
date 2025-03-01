@@ -1,30 +1,19 @@
-# Unter https://aka.ms/customizecontainer erfahren Sie, wie Sie Ihren Debugcontainer anpassen und wie Visual Studio dieses Dockerfile verwendet, um Ihre Images für ein schnelleres Debuggen zu erstellen.
-
-# Diese Stufe wird verwendet, wenn sie von VS im Schnellmodus ausgeführt wird (Standardeinstellung für Debugkonfiguration).
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-USER $APP_UID
-WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
-
-
-# Diese Stufe wird zum Erstellen des Dienstprojekts verwendet.
+# Build-Stage mit .NET 9.0 SDK
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["WTBackend/WTBackend.csproj", "WTBackend/"]
-RUN dotnet restore "./WTBackend/WTBackend.csproj"
+COPY ["WTBackend.csproj", "./"]
+RUN dotnet restore "WTBackend.csproj"
 COPY . .
-WORKDIR "/src/WTBackend"
-RUN dotnet build "./WTBackend.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "WTBackend.csproj" -c Release -o /app/build
 
-# Diese Stufe wird verwendet, um das Dienstprojekt zu veröffentlichen, das in die letzte Phase kopiert werden soll.
+# Publish-Stage
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./WTBackend.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "WTBackend.csproj" -c Release -o /app/publish
 
-# Diese Stufe wird in der Produktion oder bei Ausführung von VS im regulären Modus verwendet (Standard, wenn die Debugkonfiguration nicht verwendet wird).
-FROM base AS final
+# Runtime-Stage mit .NET 9.0 Runtime
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+ENV ASPNETCORE_URLS=http://*:8080
+EXPOSE 8080
 ENTRYPOINT ["dotnet", "WTBackend.dll"]

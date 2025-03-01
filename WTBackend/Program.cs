@@ -9,7 +9,6 @@ using WTBackend.Mappings;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 
 builder.Services.AddCors(options =>
@@ -19,20 +18,20 @@ builder.Services.AddCors(options =>
                         .AllowAnyMethod()
                         .AllowAnyHeader());
 });
-builder.WebHost.UseUrls("http://+:10000");
+
+// Holen des Connection Strings aus der Umgebungsvariable (über Render gesetzt) oder fallback auf `appsettings.json`
+string dbConnectionString = builder.Configuration.GetValue<string>("DB_CONNECTION_STRING") ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<KanbanDbContext>(option =>
-    option.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    option.UseNpgsql(dbConnectionString));
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddScoped<IActivityRepo, ActivityRepository>();
 builder.Services.AddScoped<IColumnRepo, ColumnRepository>();
 
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
@@ -40,31 +39,31 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<KanbanDbContext>();
-    dbContext.Database.Migrate(); 
-    KanbanDbContext.Seed(dbContext); 
+    dbContext.Database.Migrate();
+    KanbanDbContext.Seed(dbContext);
 }
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-
-    app.UseSwagger(); // Swagger aktivieren
-
-    // Enable middleware to serve Swagger UI (HTML, JS, CSS, etc.),
-    // specifying the Swagger JSON endpoint.
+    app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Kanban API v1");
-        c.RoutePrefix = string.Empty; // Swagger UI unter / verfügbar
+        c.RoutePrefix = string.Empty;
     });
+
+    // HTTPS-Redirection NUR in Development
+    app.UseHttpsRedirection();
 }
+
 app.UseCors("AllowAll");
 
-app.UseHttpsRedirection();
+// WICHTIG: Keine HTTPS-Redirection in Production!
+// Die folgende Zeile wurde entfernt:
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
