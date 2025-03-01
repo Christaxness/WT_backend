@@ -12,6 +12,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy => policy.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+});
+builder.WebHost.UseUrls("http://+:10000");
 
 builder.Services.AddDbContext<KanbanDbContext>(option =>
     option.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -51,6 +59,7 @@ if (app.Environment.IsDevelopment())
         c.RoutePrefix = string.Empty; // Swagger UI unter / verfügbar
     });
 }
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 
